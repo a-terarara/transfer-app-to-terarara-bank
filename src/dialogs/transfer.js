@@ -9,6 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { withStyles } from "@material-ui/core/styles";
 
 import config from "../config";
+import ConfirmDialog from "./confirm";
 
 const styles = theme => {};
 class TransferDialog extends React.Component {
@@ -50,10 +51,12 @@ class TransferDialog extends React.Component {
       .catch(e => console.log(e));
   };
   render() {
+    const { openTransfer, handleClose } = this.props;
+    const { isConfirm, transfer_id } = this.state;
     return (
       <Dialog
-        open={this.props.openTransfer}
-        onClose={this.props.handleClose}
+        open={openTransfer}
+        onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">振込</DialogTitle>
@@ -120,13 +123,22 @@ class TransferDialog extends React.Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
+          <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button onClick={this.handleTransfer} color="primary">
             確認
           </Button>
         </DialogActions>
+        {isConfirm ? (
+          <ConfirmDialog
+            isConfirm={isConfirm}
+            transfer_id={transfer_id}
+            handleClose={handleClose}
+          />
+        ) : (
+          ""
+        )}
       </Dialog>
     );
   }
